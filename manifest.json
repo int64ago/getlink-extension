@@ -22,7 +22,6 @@
     ],
     "permissions": [
         "contextMenus",
-		"notifications",
-		"http://getlink.sinaapp.com/*"
+	"notifications"
     ]
 }
