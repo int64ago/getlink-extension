@@ -56,7 +56,7 @@
                         picInfo: {srcUrl: info.srcUrl, pageUrl: info.pageUrl, token: upToken}
                     }, function (response) {
                         if (response.result && response.result !== 'error') {
-                            copyTextToClipboard('http://int64ago.qiniudn.com/' + response.result);
+                            copyTextToClipboard('https://dn-getlink.qbox.me/' + response.result);
                             showMsg(true);
                         } else {
                             showMsg(false);
