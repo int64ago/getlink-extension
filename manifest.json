@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Get Link!",
-  "version": "2.1.0",
+  "version": "3.0.0",
   "description": "Click && Get Link!",
   "icons": {
     "16": "images/icon16.png",
@@ -13,6 +13,11 @@
       "js/background.js"
     ],
     "persistent": false
+  },
+  "externally_connectable": {
+    "matches": [
+      "https://get-link.xyz/*"
+    ]
   },
   "content_scripts": [
     {

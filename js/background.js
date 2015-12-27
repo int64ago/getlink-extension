@@ -1,8 +1,9 @@
-/*global chrome, Notification */
-/*jshint nonew: true */
+(function() {
+    var DEFAULT = {
+        authKey: 'getlink',
+        server: 'https://server.get-link.xyz/uptoken'
+    };
 
-(function () {
-    "use strict";
     function copyTextToClipboard(text) {
         var copyFrom, body;
         copyFrom = document.createElement("textarea");
@@ -14,26 +15,35 @@
         body.removeChild(copyFrom);
     }
 
-    chrome.runtime.onInstalled.addListener(function () {
+    chrome.runtime.onInstalled.addListener(function() {
+        var notification = new Notification('Important Notification!!!', {
+            icon: 'images/icon48-warn.png',
+            body: 'Please click me to check.'
+        });
+        notification.onclick = function() {
+            window.open("https://goo.gl/VcOE5q");
+        };
         chrome.contextMenus.create({
             'type': 'normal',
             'title': 'Get Link!',
-            'contexts': [ "image" ],
+            'contexts': ["image"],
             'id': 'gl'
         });
     });
 
     function showMsg(isOK) {
         var notification = new Notification(isOK ? 'Getlink successfully :-)' : 'Failed to getlink!', {
-            icon: isOK ? 'images/icon48.png' : 'images/icon48_red.png',
+            icon: isOK ? 'images/icon48-ok.png' : 'images/icon48-error.png',
             body: isOK ? 'The link is now in your clipboard' : 'Please upload in getlink.int64ago.org'
         });
     }
 
     function getlink(callback) {
-        var xhr = new XMLHttpRequest();
-        xhr.open('POST', 'http://qiniu.coding.io/uptoken', true);
-        xhr.onreadystatechange = function (e) {
+        var xhr = new XMLHttpRequest(),
+            server = localStorage.getItem('getlink_server') || DEFAULT.server,
+            authKey = localStorage.getItem('getlink_authKey') || DEFAULT.authKey;
+        xhr.open('POST', server, true);
+        xhr.onreadystatechange = function(e) {
             if (xhr.readyState === 4) {
                 if (xhr.status === 200) {
                     callback(xhr.responseText);
@@ -42,21 +52,38 @@
                 }
             }
         };
-        xhr.send();
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
+        xhr.send('getlink_key=' + authKey);
     }
 
-    chrome.contextMenus.onClicked.addListener(function (info, tab) {
+    chrome.runtime.onMessageExternal.addListener(function(request, sender, sendResponse) {
+        if (request.method === "setStorage") {
+            localStorage.setItem('getlink_server', request.data.server);
+            localStorage.setItem('getlink_authKey', request.data.authKey);
+            sendResponse({
+                status: 'OK'
+            });
+        }
+    });
+
+    chrome.contextMenus.onClicked.addListener(function(info, tab) {
         if (info.menuItemId === 'gl') {
-            getlink(function (upToken) {
+            getlink(function(upToken) {
+                upToken = JSON.parse(upToken);
                 chrome.tabs.query({
                     active: true,
                     currentWindow: true
-                }, function (tabs) {
+                }, function(tabs) {
                     chrome.tabs.sendMessage(tabs[0].id, {
-                        picInfo: {srcUrl: info.srcUrl, pageUrl: info.pageUrl, token: upToken}
-                    }, function (response) {
+                        method: 'picInfo',
+                        data: {
+                            srcUrl: info.srcUrl,
+                            pageUrl: info.pageUrl,
+                            token: upToken.token
+                        }
+                    }, function(response) {
                         if (response.result && response.result !== 'error') {
-                            copyTextToClipboard('https://dn-getlink.qbox.me/' + response.result);
+                            copyTextToClipboard(upToken.domain + '/' + response.result);
                             showMsg(true);
                         } else {
                             showMsg(false);
@@ -67,4 +94,3 @@
         }
     });
 }());
-
