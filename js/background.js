@@ -32,10 +32,13 @@
     });
 
     function showMsg(isOK) {
-        var notification = new Notification(isOK ? 'Getlink successfully :-)' : 'Failed to getlink!', {
+        var notification = new Notification(isOK ? 'Get link successfully :-)' : 'Failed to get Link!', {
             icon: isOK ? 'images/icon48-ok.png' : 'images/icon48-error.png',
-            body: isOK ? 'The link is now in your clipboard' : 'Please upload in getlink.int64ago.org'
+            body: isOK ? 'The link is now in your clipboard' : 'Please click me to upload'
         });
+        notification.onclick = function() {
+            window.open("https://get-link.xyz");
+        };
     }
 
     function getlink(callback) {

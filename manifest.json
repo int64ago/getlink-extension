@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Get Link!",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Click && Get Link!",
   "icons": {
     "16": "images/icon16.png",
