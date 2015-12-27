@@ -1,2 +1,4 @@
 # getlink-extension
-Extension for [Get Link!](http://getlink.int64ago.org/)
+Chrome Extension for [Get Link!](https://get-link.xyz/)
+
+![](https://dn-getlink.qbox.me/f1uv752iysyvi.gif)
