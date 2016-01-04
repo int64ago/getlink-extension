@@ -1,7 +1,7 @@
 (function() {
     var DEFAULT = {
         authKey: 'getlink',
-        server: 'https://server.get-link.xyz/uptoken'
+        server: 'https://pub.get-link.xyz/uptoken'
     };
 
     function copyTextToClipboard(text) {
