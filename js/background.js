@@ -16,13 +16,6 @@
     }
 
     chrome.runtime.onInstalled.addListener(function() {
-        var notification = new Notification('Important Notification!!!', {
-            icon: 'images/icon48-warn.png',
-            body: 'Please click me to check.'
-        });
-        notification.onclick = function() {
-            window.open("https://goo.gl/VcOE5q");
-        };
         chrome.contextMenus.create({
             'type': 'normal',
             'title': 'Get Link!',
